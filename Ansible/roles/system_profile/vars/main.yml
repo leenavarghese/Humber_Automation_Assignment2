@@ -1,0 +1,6 @@
+---
+# vars file for system_profile
+
+filePath: /etc/profile
+messageToAppend: export TMOUT=1800
+username: n01518034

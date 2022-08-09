@@ -1,0 +1,7 @@
+---
+# handlers file for webserver
+- name: enable_httpd_handler
+  systemd:
+    enabled: True
+    name: httpd
+    state: started

@@ -1,0 +1,11 @@
+---
+# vars file for users
+groupName: cloudadmins
+
+usernames:
+  - user1000
+  - user2000
+
+supplementaryGroups:
+  - cloudadmins
+  - wheel

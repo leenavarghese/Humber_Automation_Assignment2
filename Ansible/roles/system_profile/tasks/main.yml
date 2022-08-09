@@ -1,0 +1,12 @@
+---
+# tasks file for system_profile
+- name: This task will append a message to {{ filePath }} file
+  blockinfile:
+    path: "{{ filePath }}"
+    insertafter: EOF
+    marker: "# This is a test block added by Ansible......<{mark}>"
+    marker_begin: "{{ username }}"
+    marker_end: "{{ username }}"
+    state: present
+    block: |
+      {{ messageToAppend }}

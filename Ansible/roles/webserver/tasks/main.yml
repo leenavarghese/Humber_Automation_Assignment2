@@ -1,0 +1,22 @@
+---
+# tasks file for webserver
+- name: Installing the Apache Web Server 
+  yum:
+    name: "{{ package }}"
+    state: latest
+  notify: 
+      - enable_httpd_handler
+
+- name: This task will copy the html files from server  to first remote host
+  copy:
+    src: "/mnt/c/Users/leena/Documents/Leena/Humber/Courses/Sem_3/Automation/Lab_Code/Ansible/assignment2/Ansible/roles/webserver/files/vm1.html"
+    dest: /var/www/html/index.html
+    mode: 0444
+  when: ansible_hostname == groups["linux_assignment"][0]
+
+- name: This task will copy the html file from server to second remote host
+  copy:
+    src: "/mnt/c/Users/leena/Documents/Leena/Humber/Courses/Sem_3/Automation/Lab_Code/Ansible/assignment2/Ansible/roles/webserver/files/vm2.html"
+    dest: /var/www/html/index.html
+    mode: 0444
+  when: ansible_hostname == groups["linux_assignment"][1]

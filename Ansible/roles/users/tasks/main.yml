@@ -1,0 +1,33 @@
+---
+# tasks file for users
+# Task 1
+- name: This task will create a group called {{ groupName}} 
+  group:
+    name: "{{ groupName }}"
+    state: present
+
+# Task 2
+- name: This task will create users
+  user:
+    append: yes
+    name: "{{ item }}"
+    generate_ssh_key: yes
+    groups: "{{ supplementaryGroups }}"
+    state: present
+  loop: "{{ usernames }}"
+
+# Task 3
+- name: Sudo without password for {{ groupName }} group
+  copy:
+    content: '%{{ groupName }} ALL=(ALL:ALL) NOPASSWD:ALL'
+    dest: /etc/sudoers.d/nopass
+    mode: 0440
+
+
+# Task 4
+- name: This task will distribute the ssh keys
+  authorized_key:
+    user: "{{ item }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  loop: "{{ usernames }}"

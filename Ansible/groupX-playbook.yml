@@ -1,0 +1,10 @@
+---
+# tasks file for datadisk
+
+- name: Main Playbook
+  hosts: linux_assignment
+  roles:
+    - datadisk
+    - system_profile
+    - users
+    - webserver

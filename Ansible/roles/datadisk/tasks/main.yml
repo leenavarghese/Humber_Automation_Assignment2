@@ -1,0 +1,46 @@
+---
+# tasks file for datadisk
+
+- name: This role creates partitions, filesystem, mountPoints and mounts the partition on the mountPoints"
+  block:
+  - name: Create a new primary partition
+    parted:
+      device: "{{ device }}"
+      number: "{{ idx | int  + 1}}  " 
+      part_start: "{{ item.start }}"
+      part_end: "{{ item.end }}"
+      state: present
+    loop: "{{ partitions }}"
+    loop_control:
+      index_var: idx
+
+  - name: Formating the partition
+    filesystem:
+      fstype: "{{ item.fileSystemType }}"
+      dev: "{{ device }}{{idx | int  + 1}}" 
+    loop: "{{ partitions }}"
+    loop_control:
+      index_var: idx
+
+  - name: Creating mountpoint
+    file:
+      path: "/part{{idx | int  + 1}}"
+      state: directory
+    loop: "{{ partitions }}"
+    loop_control:
+      index_var: idx
+
+  - name: Mounting the partitions
+    mount:
+      path: "/part{{idx | int  + 1}}"
+      src: "{{ device }}{{idx | int  + 1}}"
+      fstype: "{{ item.fileSystemType }}"
+      state: mounted
+    loop: "{{ partitions }}"
+    loop_control:
+      index_var: idx
+  
+  rescue:
+  - name: This task will run if any one of the sub-task under block fails
+    debug:
+      msg: "{{ failureMessage }}"
